@@ -14,7 +14,7 @@ This is not another explanation generated after the fact. It is the reasoning la
 
 ## Examples
 
-These are complete real Claude Opus 4.8 runs, including the original question, visible answer, API summary, and unlocked reasoning:
+These are complete real Claude Opus 4.8 runs, including the original question, visible answer, API summary, and unlocked reasoning. The example files preserve the original transcript text rather than rewriting it for Markdown rendering:
 
 - [Divisor sums](examples/01-divisor-sums.md): 1,960 hidden reasoning tokens behind a compact number theory answer.
 - [Randomized bubble sort](examples/02-randomized-bubble-sort.md): 19,303 hidden reasoning tokens behind a probability distribution derivation.

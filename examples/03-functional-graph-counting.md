@@ -4,15 +4,15 @@
 
 Model: Claude Opus 4.8
 
-## Question
-
-```text
+Q:
+```markdown
 Solve this hard functional graph counting problem:  Given n and m (1 ≤ m ≤ n ≤ 10^6), calculate the sum over all (n-1)^n possible functional graphs of the number of successful starting sets of size m, modulo 998244353.  There are multiple test cases (t ≤ 10^4, sum n ≤ 10^6).  Think extremely deeply, explore all mathematical approaches, derive the formula or efficient algorithm, and solve it.
 ```
 
-## Answer
+A:
 
-### Setting Up the Problem
+```markdown
+## Setting Up the Problem
 
 **The model.** A functional graph here is a map $f:[n]\to[n]$ with $f(i)\ne i$ (no self‑loops), giving exactly $(n-1)^n$ graphs. Every vertex, following edges $v\to f(v)\to f(f(v))\to\cdots$, eventually enters a cycle. A starting set $S$ is **successful** when the "infection" spreading *backward* along edges reaches everyone — equivalently:
 
@@ -20,10 +20,10 @@ Solve this hard functional graph counting problem:  Given n and m (1 ≤ m ≤ n
 
 (If some vertex never reached $S$, its orbit would loop inside $[n]\setminus S$, i.e. a whole cycle would avoid $S$; conversely, once each cycle is hit, every tree vertex flows into its cycle and then hits $S$.)
 
-### Reduction by Symmetry
+## Reduction by Symmetry
 
 We want
-$$A=\sum_{f}\left|\{S:|S|=m,\ S\text{ successful}\}\right|=\sum_{(f,S)}[\,\text{every vertex reaches }S\,].$$
+$$A=\sum_{f}\#\{S:|S|=m,\ S\text{ successful}\}=\sum_{(f,S)}[\,\text{every vertex reaches }S\,].$$
 All $m$-subsets are equivalent under relabeling, so fix a set $S$ with $|S|=m$, let $N_m$ be the number of valid $f$, and
 $$A=\binom{n}{m}\,N_m .$$
 
@@ -37,7 +37,7 @@ $$(n-1)^m \text{ ways.}$$
 By the **generalized Cayley formula**, the number of forests on $n$ labeled vertices with a *specified* set of $m$ roots is
 $$m\,n^{\,n-m-1}.$$
 
-### The Closed Form
+## The Closed Form
 
 Multiplying the independent counts:
 $$N_m=(n-1)^m\cdot m\,n^{\,n-m-1},$$
@@ -47,7 +47,7 @@ For $m=n$ (all vertices absorbing) the answer is simply $(n-1)^n$; this matches 
 $$A=\binom{n}{m}\,m\,(n-1)^m\,n^{\,n-m}\,n^{-1},$$
 since $n\not\equiv 0$ modulo the prime ($n\le 10^6$), avoiding a negative exponent.
 
-#### Verification
+### Verification
 
 * $n=2,m=1$: $\binom21\cdot1\cdot1\cdot2^{0}=2$. Only graph is the 2‑cycle; both singletons work → $2$. ✓
 * $n=3,m=1$: $\binom31\cdot1\cdot2\cdot3^{1}=18$. Brute force over all $8$ graphs gives $18$. ✓
@@ -55,7 +55,7 @@ since $n\not\equiv 0$ modulo the prime ($n\le 10^6$), avoiding a negative expone
 * $n=4,m=2$: $\binom42\cdot2\cdot9\cdot4^{1}=432$. ✓
 * $n=1,m=1$: $(n-1)^n=0$. ✓
 
-### Implementation
+## Implementation
 
 Precompute factorials up to $\max n$; each query is $O(\log n)$.
 
@@ -98,12 +98,11 @@ int main(){
 
 **Key formula to remember:**
 $$A=\binom{n}{m}\,m\,(n-1)^m\,n^{\,n-m-1}.$$
+```
 
-## API Summary
+Summary:
 
-<details open>
-<summary>Show summary</summary>
-
+```markdown
 I need to clarify what this problem is asking for. The setup mentions a functional graph with $n$ nodes, but the count of $(n-1)^n$ possible graphs suggests each node can point to $n-1$ other nodes rather than any of the $n$ nodes, which is unusual. Let me work through what "successful starting set" and the other constraints actually mean here.
 
 By symmetry, I can reduce this to counting how many functional graphs make a fixed set $S$ of size $m$ successful, then multiply by $\binom{n}{m}$ to get the total across all possible sets.
@@ -149,14 +148,11 @@ For implementation, I'll handle m=n as a special case or use modular inverse sin
 The formula $\binom{n}{m} m(n-1)^m n^{n-m-1}$ checks out across test cases and edge cases like n=1. For implementation, I'll precompute factorials up to 1e6 and use modular exponentiation for each test case, which fits the constraints perfectly. I can unify the formula by expressing the transient count as $m \cdot n^{n-m} \cdot n^{-1}$, which works for all values of $m$ including the edge case $m=n$. Computing the modular inverse of $n$ handles the division cleanly. Let me verify with $n=3, m=1$: I get $3 \cdot 1 \cdot 2 \cdot 9 \cdot \text{inv}(3) = 18$, which checks out. Now I'll write up the solution with code that precomputes factorials and computes binomial coefficients and powers for each test case.
 
 Writing implementation code... I'm working through the proof of the key combinatorial lemma: the number of functions from k transient nodes to n total nodes where all transient nodes reach the m absorbing nodes equals m·n^(k-1). I'll establish this rigorously and then present the final formula and code. The final formula is $A=\binom{n}{m}\, m\,(n-1)^m\, n^{\,n-m-1}$, which simplifies to $(n-1)^n$ when $m=n$. Now I'll write this up cleanly.
+```
 
-</details>
+Reasoning(**18819 tokens**):
 
-## Unlocked Reasoning
-
-<details>
-<summary>Show full reasoning (18819 tokens)</summary>
-
+```markdown
 Let me try to understand this problem precisely. Unfortunately the problem statement is a bit vague. Let me reconstruct what "functional graph", "successful starting set", etc. mean.
 
 We have $n$ nodes. A functional graph normally is defined by a function $f: \{1,\dots,n\} \to \{1,\dots,n\}$, giving $n^n$ graphs. But here we have $(n-1)^n$ possible functional graphs. That suggests each node has $n-1$ choices for its outgoing edge, i.e., $f(i) \neq i$ (no self-loops). So $f: [n] \to [n]$ with $f(i) \neq i$. That gives $(n-1)^n$ functions.
@@ -233,9 +229,9 @@ Let me consider it's the well-known problem: "Given a functional graph, a set S 
 
 I think the cleanest and most likely intended: A set $S$ of size $m$ is successful if the set of nodes reachable from $S$ (following edges forward) has size... equals something? Or a set is successful if it's exactly the set of "sources"?
 
-Let me reconsider the reverse reachability = "every cycle hit" interpretation, which is clean. Answer = $\binom{n}{m}$ × (number of no-self-loop functions where fixed $S$, $|S|=m$, hits all cycles). Hmm but hitting all cycles for a fixed specific set... by symmetry we could also just count directly:
+Let me reconsider the reverse reachability = "every cycle hit" interpretation, which is clean. Answer = $\binom{n}{m}$ × (# no-self-loop functions where fixed $S$, $|S|=m$, hits all cycles). Hmm but hitting all cycles for a fixed specific set... by symmetry we could also just count directly:
 
-Answer $=\sum_{\text{functions}} (\text{number of size-}m\text{ sets hitting all cycles})$.
+Answer $=\sum_{\text{functions}} (\text{# size-}m\text{ sets hitting all cycles})$.
 
 Number of size-$m$ subsets hitting all cycles depends on cycle structure. Actually if the set of all cycle nodes is $C$ (with $c=|C|$), a set $S$ hits all cycles iff it contains at least one node from each cycle. Hmm that's about individual cycles, complicated.
 
@@ -308,7 +304,7 @@ Let me consider that maybe "starting set" relates to a "BFS layering" where succ
 I'll now consider the strong possibility that the intended answer has a nice closed form. Let me try to derive the "hit every cycle" sum and see if it's clean.
 
 We want:
-$$A = \sum_{f: [n]\to[n], f(i)\neq i} \left|\{S \subseteq [n], |S|=m, S \cap C \neq \emptyset \text{ for every cycle } C \text{ of } f\}\right|.$$
+$$A = \sum_{f: [n]\to[n], f(i)\neq i} \#\{S \subseteq [n], |S|=m, S \cap C \neq \emptyset \text{ for every cycle } C \text{ of } f\}.$$
 
 By linearity/symmetry, $A = \binom{n}{m} \cdot P$ where... no, because the condition depends on cycles relative to S, symmetry over S works: For a fixed S of size m, count functions where S hits all cycles, times $\binom nm$? Wait we need count of (f,S) pairs. By symmetry over the choice of S (all m-subsets equivalent under relabeling), $A = \binom{n}{m} \cdot N_m$ where $N_m$ = number of no-self-loop functions f such that a FIXED set S of size m hits all cycles of f.
 
@@ -611,5 +607,4 @@ $$\boxed{A=\binom{n}{m}\, m\,(n-1)^m\, n^{\,n-m-1}}$$
 with the m=n case equal to $(n-1)^n$ (consistent via modular inverse of n).
 
 Write up.
-
-</details>
+```
