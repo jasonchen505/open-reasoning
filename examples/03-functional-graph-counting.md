@@ -23,7 +23,7 @@ Solve this hard functional graph counting problem:  Given n and m (1 ≤ m ≤ n
 ### Reduction by Symmetry
 
 We want
-$$A=\sum_{f}\#\{S:|S|=m,\ S\text{ successful}\}=\sum_{(f,S)}[\,\text{every vertex reaches }S\,].$$
+$$A=\sum_{f}\left|\{S:|S|=m,\ S\text{ successful}\}\right|=\sum_{(f,S)}[\,\text{every vertex reaches }S\,].$$
 All $m$-subsets are equivalent under relabeling, so fix a set $S$ with $|S|=m$, let $N_m$ be the number of valid $f$, and
 $$A=\binom{n}{m}\,N_m .$$
 
@@ -233,9 +233,9 @@ Let me consider it's the well-known problem: "Given a functional graph, a set S 
 
 I think the cleanest and most likely intended: A set $S$ of size $m$ is successful if the set of nodes reachable from $S$ (following edges forward) has size... equals something? Or a set is successful if it's exactly the set of "sources"?
 
-Let me reconsider the reverse reachability = "every cycle hit" interpretation, which is clean. Answer = $\binom{n}{m}$ × (# no-self-loop functions where fixed $S$, $|S|=m$, hits all cycles). Hmm but hitting all cycles for a fixed specific set... by symmetry we could also just count directly:
+Let me reconsider the reverse reachability = "every cycle hit" interpretation, which is clean. Answer = $\binom{n}{m}$ × (number of no-self-loop functions where fixed $S$, $|S|=m$, hits all cycles). Hmm but hitting all cycles for a fixed specific set... by symmetry we could also just count directly:
 
-Answer $=\sum_{\text{functions}} (\text{# size-}m\text{ sets hitting all cycles})$.
+Answer $=\sum_{\text{functions}} (\text{number of size-}m\text{ sets hitting all cycles})$.
 
 Number of size-$m$ subsets hitting all cycles depends on cycle structure. Actually if the set of all cycle nodes is $C$ (with $c=|C|$), a set $S$ hits all cycles iff it contains at least one node from each cycle. Hmm that's about individual cycles, complicated.
 
@@ -308,7 +308,7 @@ Let me consider that maybe "starting set" relates to a "BFS layering" where succ
 I'll now consider the strong possibility that the intended answer has a nice closed form. Let me try to derive the "hit every cycle" sum and see if it's clean.
 
 We want:
-$$A = \sum_{f: [n]\to[n], f(i)\neq i} \#\{S \subseteq [n], |S|=m, S \cap C \neq \emptyset \text{ for every cycle } C \text{ of } f\}.$$
+$$A = \sum_{f: [n]\to[n], f(i)\neq i} \left|\{S \subseteq [n], |S|=m, S \cap C \neq \emptyset \text{ for every cycle } C \text{ of } f\}\right|.$$
 
 By linearity/symmetry, $A = \binom{n}{m} \cdot P$ where... no, because the condition depends on cycles relative to S, symmetry over S works: For a fixed S of size m, count functions where S hits all cycles, times $\binom nm$? Wait we need count of (f,S) pairs. By symmetry over the choice of S (all m-subsets equivalent under relabeling), $A = \binom{n}{m} \cdot N_m$ where $N_m$ = number of no-self-loop functions f such that a FIXED set S of size m hits all cycles of f.
 

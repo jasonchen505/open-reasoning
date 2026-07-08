@@ -31,7 +31,7 @@ $$
 There are exactly $2^{N}$ equally likely coin sequences, and
 
 $$
-\boxed{\;\Pr(\pi)=\frac{\#\{\text{coin sequences producing }\pi\}}{2^{N}}=\frac{k_\pi}{2^{N}}\;}
+\boxed{\;\Pr(\pi)=\frac{\operatorname{count}_{W}(\pi)}{2^{N}}=\frac{k_\pi}{2^{N}}\;}
 $$
 
 for some nonnegative integer $k_\pi$.
